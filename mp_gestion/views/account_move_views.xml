@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="mp_gestion_menu_root" name="MP Gestion"/>
+    <record id="view_mp_gestion_account_move_tree" model="ir.ui.view">
+        <field name="name">account.move.line.tree</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <tree string="Gestión">
+                <field name="id" optional="hide"/>
+                <field name="date" string="Fecha contable"/>
+                <field name="vat" string="RUT"/>
+                <field name="partner_id" string="Proveedor" optional="show"/>
+                <field name="invoice_date" string="Fecha asiento" optional="hide"/>
+                <field name="move_name" optional="hide"/>
+                <field name="code_account" optional="show"/>
+                <field name="account_id" optional="show"/>
+                <field name="user_type_id" optional="show" string="Tipo de Cuenta"/>
+                <field name="move_id" optional="hide"/>
+                <field name="product_id" optional="show" string="Articulo"/>
+                <field name="invoice_origin" optional="show" string="Documento origen"/>
+                <field name="l10n_latam_document_type_id" optional="show"/>
+                <field name="journal_id" optional="show"/>
+                <field name="mp_grupo_flujo_id" optional="show"/>
+                <field name="mp_flujo_id" optional="show"/>
+                <field name="analytic_account_id" optional="show"/>
+                <field name="analytic_tag_ids" widget="many2many_tags" optional="show"/>
+                <field name="currency_id" optional="show"/>
+                <field name="amount_currency" optional="show"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="ir_account_apuntes_contables">
+        <field name="name">Análisis de Datos</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="mp_gestion.view_mp_gestion_account_move_tree"/>
+        <field name="context">{'search_default_group_by_move':1}</field>
+    </record>
+    <record model="ir.actions.act_window" id="ir_account_apuntes_contables_group_move_account">
+        <field name="name">Análisis de Datos agrupados por cuenta analítica y cuentas</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="mp_gestion.view_mp_gestion_account_move_tree"/>
+        <field name="context">{'group_by': ['analytic_account_id', 'move_id']}</field>
+    </record>
+    <menuitem id="account_mp_provision_menu" parent="mp_gestion_menu_root" name="Reporte Apuntes contables" sequence="30" groups="mp_gestion.mp_gestion_group"/>
+    <menuitem id="menu_reportes_contables" name="Reporte contables" parent="account_mp_provision_menu" sequence="10"/>
+    <menuitem id="menu_account_apuntes_contables" name="Reporte apuntes contables" action="ir_account_apuntes_contables" parent="menu_reportes_contables" sequence="50"/>
+    <menuitem id="menu_account_apuntes_contables_aprupado_asiento_cuenta" name="Reporte apuntes contables agrupados por cuenta analítica y cuentas " action="ir_account_apuntes_contables_group_move_account" parent="menu_reportes_contables" sequence="60"/>
+</odoo>
